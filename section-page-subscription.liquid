@@ -45,7 +45,12 @@
               <h3>{{ value | escape }}</h3>
               <span>Gratis Levering</span>
               <span>Afmelding nar det pesser</span>
-              <span><strong>20%</strong> rabat </span>
+              <span><strong>
+                {%- if value == '2 Samme Farver' -%}10%
+                {%- elsif value == '4 Samme Farver' -%}20%
+                {%- elsif value == '1 Hver Farve' -%}30%
+                {%- elsif value == '2 Hver Farve' -%}40%{%- else -%}0%{%- endif -%}
+                </strong> rabat </span>
               <a href="javascript:void(0)" data-val="{{ value | escape }}">Bestil nu</a>
             </div>
           </li>{% endunless %}{%- endfor -%}
@@ -74,10 +79,11 @@
             </li>{% endunless %}{%- endfor -%}
           </ul>
         </div>{%- endif -%}{%- endfor -%}
+         <div class="rsp_for_submit">
+        <input type="submit" name="submit" value="Køb nu">
       </div>
-      <div class="rsp_for_submit">
-        <input type="submit" name="submit" value="submit">
       </div>
+     
     {%- endform -%}
   </div>
 </div>
