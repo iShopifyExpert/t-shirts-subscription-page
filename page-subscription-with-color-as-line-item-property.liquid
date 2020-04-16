@@ -1,0 +1,166 @@
+{%- comment -%}Don't edit or remove this - AG @2020{%- endcomment -%}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {%- assign product = all_products[section.settings.product] -%}                                                                                                                                                                                                                                
+<div class="container row about-image">
+  <div class="about-image__img">
+    <img src="{{product.featured_image | img_url: 'master'}}"/>
+  </div>
+  <div class="about-image__inner">
+    <h2 style="font-weight:900; text-align:center;">SÅDAN FUNGERER ET ABONNEMENT</h2>
+    <div style="display:flex;">
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/truck.png?v=1585608058" width="48" class="icon-img"/>
+        <article class="icon-text">Vælg en af vores 4 pakker</article>
+      </div>
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/truck.png?v=1585608058" width="48" class="icon-img"/>
+        <article class="icon-text">Gratis og fast levering</article>
+      </div>
+    </div>
+    <div style="display:flex;">
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/truck.png?v=1585608058" width="48" class="icon-img"/>
+        <article class="icon-text">Vælg selv farve og størrelse</article>
+      </div>
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/truck.png?v=1585608058" width="48" class="icon-img"/>
+        <article class="icon-text">Unisex til ham og hende</article>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Sadan Sec2 Start -->
+<div class="rsp_sadan_sec2">
+  <div class="inner">
+    {%- assign product-id = product.id | prepend: 'AddToCartForm-' -%}
+    {%- form 'product', product, data-productid: product.id, id: product-id -%}
+      {%- if product.available -%}{%- include 'subscription-product' -%}{%- endif -%}
+      <select name="id" data-productid="{{ product.id }}" id="productSelect-{{ product.id }}" class="product-single__variants no-js" autocomplete="off">{% for variant in product.variants %}{% if variant.available %}
+        <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-title="{{ variant.title }}" data-orignalvalue="{{ variant.metafields.subscriptions.discount_variant_id }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>{% else %}
+        <option disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>{% endif %}{% endfor %}
+      </select>
+      {%- for option in product.options -%}{%- assign option_index = forloop.index0 -%}{%- if option == 'Boks' -%}
+      <div class="rsp_sadan_steps" data-option-index="{{ option_index }}">
+        <ul>{%- assign values = '' -%}{%- for variant in product.variants -%}{% assign value = variant.options[option_index] %}{% unless values contains value %}{% assign values = values | join: ',' %}{% assign values = values | append: ',' | append: value %}{% assign values = values | split: ',' %}
+          <li>
+            <div class="rsp_step_detail">
+              <h3>{{ value | escape }}</h3>
+              <span>Gratis Levering</span>
+              <span>Afmelding nar det pesser</span>
+              <span><strong>
+                {%- if value == '2 Samme Farver' -%}20%
+                {%- elsif value == '4 Samme Farver' -%}20%
+                {%- elsif value == '1 Hver Farve' -%}20%
+                {%- elsif value == '2 Hver Farve' -%}20%{%- else -%}0%{%- endif -%}
+                </strong> rabat </span>
+              <a href="javascript:void(0)" data-val="{{ value | escape }}">Bestil nu</a>
+            </div>
+          </li>{% endunless %}{%- endfor -%}
+        </ul>
+      </div>{%- endif -%}{%- endfor -%}
+      <div class="rsp_sadan_form">
+        <div class="rsp_form_toplabel">
+          <label>Afsendelse: Første pakke bliver sendt indenfor 2 arbejdsdage.<br><a href="https://bareentshirt.dk/pages/kontakt"> Kontakt os</a>  hvis du vil ændre afsendelsesdag eller adresse</label>
+        </div>
+        <div class="rsp_form_mainbtns">
+          <label>HVOR OFTE</label>
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver Måned" data-val="1">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 2. Måned" data-val="2">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 3. Måned" data-val="3">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 6. Måned" data-val="6">
+        </div>
+        {%- for option in product.options -%}{%- assign option_index = forloop.index0 -%}{%- if option == 'Størrelse' or option == 'Farve' -%}
+        <div class="rsp_select_{%- if option == 'Størrelse' -%}sizes{%- elsif option == 'Farve' -%}color{%- else -%}sizes{%- endif -%}" data-option-index="{{ option_index }}">
+          {%- if option == 'Størrelse' -%}<p class="rsp_sizes_title">HVILKEN STØRRELSE SKAL DINE NYE T-SHIRTS VÆRE?{{option}}</p>{%- endif -%}
+          <label class="option-label">Vælg {{option}}</label>
+          <ul>{%- assign values = '' -%}{%- for variant in product.variants -%}{% assign value = variant.options[option_index] %}{% unless values contains value %}{% assign values = values | join: ',' %}{% assign values = values | append: ',' | append: value %}{% assign values = values | split: ',' %}
+            <li>
+              <input type="radio" id="{{ value | handle }}-option" name="selector-{{option | handle}}" value="{{ value | escape }}">
+              <label for="{{ value | handle }}-option"{%- if option == 'Farve' -%}style="background-color: {%- if value == 'Hvid' -%}#fff{%- elsif value == 'Sort' -%}#000{%- else -%}{{ value | split: ' ' | last | handle }}{%- endif -%};"{%- endif -%}>{{ value | escape }}</label>
+              <div class="check"></div>
+            </li>{% endunless %}{%- endfor -%}
+          </ul>
+        </div>{%- endif -%}{%- endfor -%}
+        <div class="rsp_select_color">
+          <label class="option-label">Vælg Farve</label>
+          <ul>
+            <li>
+              <input type="radio" id="hvid-option" name="properties[Selector Farve]" value="Hvid">
+              <label for="hvid-option" style="background-color:#fff;">Hvid</label>
+              <div class="check"></div>
+            </li>
+            <li>
+              <input type="radio" id="sort-option" name="properties[Selector Farve]" value="Sort">
+              <label for="sort-option" style="background-color:#000;">Sort</label>
+              <div class="check"></div>
+            </li></ul>
+        </div>
+        <div class="rsp_for_submit">
+          <input type="submit" name="submit" value="Køb nu">
+        </div>
+      </div>
+     
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Our Subscription Box",
+    "settings": [
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Select Product",
+        "info": "Produktet skal have disse muligheder: Boks, Størrelse, Farve"
+      }
+    ]
+  }
+{% endschema %}
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.rsp_step_detail a').click(function(){
+      $('.rsp_sadan_form').addClass('rsp_visible');
+      $('.rsp_step_detail a').removeClass('active');
+      $(this).addClass('active');
+      var s = $('.rsp_select_sizes ul li.active').length;
+      var a = $('.rsp_step_detail a.active').data('val');
+      if ((a == '2 Samme Farver' || a == '4 Samme Farver') && (s > 0)) {
+        $('.rsp_select_color').addClass('rsp_color_visible');
+      } else {
+        $('.rsp_select_color').removeClass('rsp_color_visible');
+        $('.rsp_select_color ul li.active').removeClass('active').find('input[type=radio]').prop('checked', false);
+      }
+    });
+    
+    $('.rsp_select_btn').click(function(){
+      $('.rsp_select_sizes').addClass('rsp_sizes_visible');
+      $('.rsp_select_btn').removeClass('active');
+      $(this).addClass('active');
+      $('.rc_select__frequency').val($(this).data('val')).trigger('change');
+    });
+    $('.rsp_select_sizes ul li').click(function(){
+      $('.rsp_select_sizes ul li').removeClass('active');
+      $(this).addClass('active');
+      var a = $('.rsp_step_detail a.active').data('val');
+      if (a == '2 Samme Farver' || a == '4 Samme Farver') {
+        $('.rsp_select_color').addClass('rsp_color_visible');
+      } else {
+        $('.rsp_select_color').removeClass('rsp_color_visible');
+      }
+    });
+    $('.rsp_select_color ul li').click(function(){
+      $('.rsp_for_submit').addClass('rsp_submit_visible');
+      $('.rsp_select_color ul li').removeClass('active');
+      $(this).addClass('active');
+    });
+    
+    $(document).on('click','.rsp_step_detail a, .rsp_select_sizes ul li',function() {
+      var option1 = $('.rsp_step_detail a.active').data('val'); var option2 = $('.rsp_select_sizes ul li.active').find('input[type=radio]').val();
+      var optionselectedid = $('.product-single__variants option[data-title="'+option1+' / '+option2+'"]').val();
+      $('.product-single__variants').find('option:selected').attr('selected', false);
+      $('.product-single__variants').val(optionselectedid).attr('selected', true).trigger('change');
+      console.log(option1+' / '+option2);
+    });
+  });
+</script>
