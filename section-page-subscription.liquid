@@ -128,7 +128,6 @@
       $('.rsp_for_submit').addClass('rsp_submit_visible');
       $('.rsp_select_color ul li').removeClass('active');
       $(this).addClass('active');
-      $('#productSelect-{{product.id}}').val($(this).data('val')).trigger('change');
     });
     
     $(document).on('click','.rsp_step_detail a, .rsp_select_sizes ul li, .rsp_select_color ul li',function() {
