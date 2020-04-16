@@ -93,7 +93,14 @@
               <div class="check"></div>
             </li></ul>
         </div>
-        <div class="rsp_for_submit">
+        <div class="rsp_for_submit">{%comment%}{%endcomment%}
+          <label class="option-label">Summary</label>
+          <div class=".rsp_select_sizes">
+            <p>some content for <span id="label1"></span></p>
+            <p>some content for <span id="label2"></span></p>
+            <p>some content for <span id="label3"></span></p>
+            <p>some content for <span id="label4"></span></p>
+          </div>
           <input type="submit" name="submit" value="Køb nu">
         </div>
       </div>
@@ -156,11 +163,19 @@
       $(this).addClass('active');
     });
     
-    $(document).on('click','.rsp_step_detail a, .rsp_select_sizes ul li',function() {
-      var option1 = $('.rsp_step_detail a.active').data('val'); var option2 = $('.rsp_select_sizes ul li.active').find('input[type=radio]').val();
+    $(document).on('click','.rsp_step_detail a, .rsp_select_sizes ul li, .rsp_select_color ul li, .rsp_select_btn',function() {
+      var option1 = $('.rsp_step_detail a.active').data('val'); var option2 = $('.rsp_select_sizes ul li.active').find('input[type=radio]').val(); var option3 = $('.rsp_select_color ul li.active').find('input[type=radio]').val(); var option4 = $('.rsp_select_btn.active').val();
       var optionselectedid = $('.product-single__variants option[data-title="'+option1+' / '+option2+'"]').val();
       $('.product-single__variants').find('option:selected').attr('selected', false);
       $('.product-single__variants').val(optionselectedid).attr('selected', true).trigger('change');
+      $('#label1').text(option1); $('#label2').text(option2); $('#label4').text(option4);
+      var b = $('.rsp_step_detail a.active').data('val');
+      if (b == '2 Samme Farver' || b == '4 Samme Farver') {
+        $('#label3').text(option3).parent().show();
+      } else {
+        $('#label3').parent().hide();
+      }
+      
       console.log(option1+' / '+option2);
     });
   });
