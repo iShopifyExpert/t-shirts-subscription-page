@@ -1,0 +1,192 @@
+{%- comment -%}Don't edit or remove this - AG @2020{%- endcomment -%}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {%- assign product = all_products[section.settings.product] -%}                                                                                                                                                                                                                                
+<div class="container row about-image">
+  <div class="about-image__img" style="width:35%!important;">
+    <img src="{{product.featured_image | img_url: 'master'}}"/>
+  </div>
+  <div class="about-image__inner">
+    <h2 style="font-weight:900; text-align:center; font-size: 2.5rem;">SÅDAN FUNGERER ET ABONNEMENT</h2>
+    <div style="display:flex;">
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/pakke.png" width="48" class="icon-img"/>
+        <article class="icon-heading">VÆLG EN PAKKE</article>
+        <article class="icon-text">Vælg enten en eller begge farver samt hvilken størrelse de skal være</article>
+      </div>
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/levering.png" width="48" class="icon-img"/>
+        <article class="icon-heading">GRATIS LEVERING</article>
+        <article class="icon-text">Altid gratis, hurtig og fast levering ud fra hvor ofte du vil modtage</article>
+      </div>
+    </div>
+    <div style="display:flex;">
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/penge.png" width="48" class="icon-img"/>
+        <article class="icon-heading">SPAR PENGE</article>
+        <article class="icon-text">Spar 20-30% på hver levering sammenlignet med enkeltordre</article>
+      </div>
+      <div class="icon-box">
+        <img src="https://cdn.shopify.com/s/files/1/1834/4909/files/fleksibelt.png" width="48" class="icon-img"/>
+        <article class="icon-heading">FULD FLEKSIBELT</article>
+        <article class="icon-text">Vores abonnement er uden binding, opsiges fra dag til dag</article>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Sadan Sec2 Start -->
+<div class="rsp_sadan_sec2">
+  <div class="inner">
+    {%- assign product-id = product.id | prepend: 'AddToCartForm-' -%}
+    {%- form 'product', product, data-productid: product.id, id: product-id -%}
+      {%- if product.available -%}{%- include 'subscription-product' -%}{%- endif -%}
+      <select name="id" data-productid="{{ product.id }}" id="productSelect-{{ product.id }}" class="product-single__variants no-js" autocomplete="off">{% for variant in product.variants %}{% if variant.available %}
+        <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-title="{{ variant.title }}" data-orignalvalue="{{ variant.metafields.subscriptions.discount_variant_id }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>{% else %}
+        <option disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>{% endif %}{% endfor %}
+      </select>
+      {%- for option in product.options -%}{%- assign option_index = forloop.index0 -%}{%- if option == 'Boks' -%}
+      <div class="rsp_sadan_steps" data-option-index="{{ option_index }}">
+        <ul>{%- assign values = '' -%}{%- for variant in product.variants -%}{% assign value = variant.options[option_index] %}{% unless values contains value %}{% assign values = values | join: ',' %}{% assign values = values | append: ',' | append: value %}{% assign values = values | split: ',' %}
+          <li>
+            <div class="rsp_step_detail">
+              <h3>{{ value | escape }}</h3>
+              <span>Gratis Levering</span>
+              <span>Afmelding nar det pesser</span>
+              <span>{{variant.price | money}}</span>
+              <span><strong>
+                {%- if value == '4 Af Samme Farve' -%}35%
+                {%- elsif value == '2 Af Samme Farve' -%}20%
+                {%- elsif value == '1 Af Hver Farve' -%}30%
+                  {%- elsif value == '2 Af Hver Farve' -%}10%{%- else -%}0%{%- endif -%}
+              </strong> rabat </span>
+              <a href="javascript:void(0)" data-val="{{value | escape}}" data-price="{{variant.price | money}}" data-cprice="{{variant.compare_at_price | money}}">Bestil nu</a>
+            </div>
+          </li>{% endunless %}{%- endfor -%}
+        </ul>
+      </div>{%- endif -%}{%- endfor -%}
+      <div class="rsp_sadan_form">
+        <div class="rsp_form_toplabel">
+          <label>Afsendelse: Første pakke bliver sendt indenfor 2 arbejdsdage. Herefter ud fra valgte interval. Abonnement kan opsiges indtil 2 hverdage før næste levering.<br><a href="https://bareentshirt.dk/pages/kontakt"> Kontakt os</a>  hvis du vil ændre afsendelsesdag eller adresse</label>
+        </div>
+        <div class="rsp_form_mainbtns">
+          <label>HVOR OFTE</label>
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver Måned" data-val="1">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 2. Måned" data-val="2">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 3. Måned" data-val="3">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 6. Måned" data-val="6">
+        </div>
+        {%- for option in product.options -%}{%- assign option_index = forloop.index0 -%}{%- if option == 'Størrelse' or option == 'Farve' -%}
+        <div class="rsp_select_{%- if option == 'Størrelse' -%}sizes{%- elsif option == 'Farve' -%}color{%- else -%}sizes{%- endif -%}" data-option-index="{{ option_index }}">
+          {%- if option == 'Størrelse' -%}<p class="rsp_sizes_title">VÆRE {{option}}</p>{%- endif -%}
+          {%comment%}<label class="option-label">Vælg {{option}}</label> {%endcomment%}
+          <ul>{%- assign values = '' -%}{%- for variant in product.variants -%}{% assign value = variant.options[option_index] %}{% unless values contains value %}{% assign values = values | join: ',' %}{% assign values = values | append: ',' | append: value %}{% assign values = values | split: ',' %}
+            <li>
+              <input type="radio" id="{{ value | handle }}-option" name="selector-{{option | handle}}" value="{{ value | escape }}">
+              <label for="{{ value | handle }}-option"{%- if option == 'Farve' -%}style="background-color: {%- if value == 'Hvid' -%}#fff{%- elsif value == 'Sort' -%}#000{%- else -%}{{ value | split: ' ' | last | handle }}{%- endif -%};"{%- endif -%}>{{ value | escape }}</label>
+              <div class="check"></div>
+            </li>{% endunless %}{%- endfor -%}
+          </ul>
+        </div>{%- endif -%}{%- endfor -%}
+        <div class="rsp_select_color">
+          <label class="option-label">Vælg Farve</label>
+          <ul>
+            <li>
+              <input type="radio" id="hvid-option" name="properties[Selector Farve]" value="Hvid">
+              <label for="hvid-option" style="background-color:#fff;">Hvid</label>
+              <div class="check"></div>
+            </li>
+            <li>
+              <input type="radio" id="sort-option" name="properties[Selector Farve]" value="Sort">
+              <label for="sort-option" style="background-color:#000;">Sort</label>
+              <div class="check"></div>
+            </li>
+          </ul>
+        </div>
+        <div class="rsp_for_submit">
+          <label class="option-label">4. Bekræftelse</label>
+          <div class="summary">
+            <p>Abonnement: <span class="labelprice">219kr</span></p>
+            <p><span class="label1"></span> <span class="label4"></span>: <span class="labelprice">219kr</span>. inkl. Fragt Normalpris: <span class="labelcprice">278kr</span></p>
+            <p>Første fornyelse om <span class="label4"></span></p>
+            <p>Du betaler kun for de produkter vi sender til dig. Husk du kan opsige øjeblikkeligt fra dag til dag.</p>
+
+            <input type="submit" name="submit" value="Køb nu">
+          </div>
+        </div>
+      </div>
+     
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Our Subscription Box",
+    "settings": [
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Select Product",
+        "info": "Produktet skal have disse muligheder: Boks, Størrelse, Farve"
+      }
+    ]
+  }
+{% endschema %}
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.rsp_step_detail a').click(function(){
+      $('.rsp_sadan_form').addClass('rsp_visible');
+      $('.rsp_step_detail a').removeClass('active');
+      $(this).addClass('active');
+      var s = $('.rsp_select_sizes ul li.active').length;
+      var a = $('.rsp_step_detail a.active').data('val');
+      var p = $('.rsp_step_detail a.active').data('price');
+      var cp = $('.rsp_step_detail a.active').data('cprice');
+      $('.labelprice').text(p); $('.labelcprice').text(cp);
+      if ((a == '2 Af Samme Farve' || a == '4 Af Samme Farve') && (s > 0)) {
+        $('.rsp_select_color').addClass('rsp_color_visible');
+      } else {
+        $('.rsp_select_color').removeClass('rsp_color_visible');
+        $('.rsp_select_color ul li.active').removeClass('active').find('input[type=radio]').prop('checked', false);
+      }
+    });
+    
+    $('.rsp_select_btn').click(function(){
+      $('.rsp_select_sizes').addClass('rsp_sizes_visible');
+      $('.rsp_select_btn').removeClass('active');
+      $(this).addClass('active');
+      $('.rc_select__frequency').val($(this).data('val')).trigger('change');
+    });
+    $('.rsp_select_sizes ul li').click(function(){
+      $('.rsp_select_sizes ul li').removeClass('active');
+      $(this).addClass('active');
+      var a = $('.rsp_step_detail a.active').data('val');
+      var p = $('.rsp_step_detail a.active').data('price');
+      var cp = $('.rsp_step_detail a.active').data('cprice');
+      $('.labelprice').text(p); $('.labelcprice').text(cp);
+      if (a == '2 Af Samme Farve' || a == '4 Af Samme Farve') {
+        $('.rsp_select_color').addClass('rsp_color_visible');
+      } else {
+        $('.rsp_select_color').removeClass('rsp_color_visible');
+        $('.rsp_for_submit').addClass('rsp_submit_visible');
+      }
+    });
+    $('.rsp_select_color ul li').click(function(){
+      $('.rsp_for_submit').addClass('rsp_submit_visible');
+      $('.rsp_select_color ul li').removeClass('active');
+      $(this).addClass('active');
+    });
+    
+    $(document).on('click','.rsp_step_detail a, .rsp_select_sizes ul li, .rsp_select_color ul li, .rsp_select_btn',function() {
+      var option1 = $('.rsp_step_detail a.active').data('val'); var option2 = $('.rsp_select_sizes ul li.active').find('input[type=radio]').val(); var option3 = $('.rsp_select_color ul li.active').find('input[type=radio]').val(); var option4 = $('.rsp_select_btn.active').val();
+      var optionselectedid = $('.product-single__variants option[data-title="'+option1+' / '+option2+'"]').val();
+      $('.product-single__variants').find('option:selected').attr('selected', false);
+      $('.product-single__variants').val(optionselectedid).attr('selected', true).trigger('change');
+      $('.label1').text(option1); $('.label2').text(option2); $('.label4').text(option4);
+      var p = $('.rsp_step_detail a.active').data('price');
+      var cp = $('.rsp_step_detail a.active').data('cprice');
+      $('.labelprice').text(p); $('.labelcprice').text(cp);
+      
+      console.log(option1+' / '+option2);
+    });
+  });
+</script>
