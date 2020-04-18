@@ -141,7 +141,7 @@
       var a = $('.rsp_step_detail a.active').data('val');
       var p = $('.rsp_step_detail a.active').data('price');
       var cp = $('.rsp_step_detail a.active').data('cprice');
-      $('.labelprice').text(p); $('.labelcprice').text(cp);
+      $('.labelprice').text(p); if (cp != '') { $('.labelcprice').text(cp); }
       if ((a == '2 Af Samme Farve' || a == '4 Af Samme Farve') && (s > 0)) {
         $('.rsp_select_color').addClass('rsp_color_visible');
       } else {
@@ -162,7 +162,7 @@
       var a = $('.rsp_step_detail a.active').data('val');
       var p = $('.rsp_step_detail a.active').data('price');
       var cp = $('.rsp_step_detail a.active').data('cprice');
-      $('.labelprice').text(p); $('.labelcprice').text(cp);
+      $('.labelprice').text(p); if (cp != '') { $('.labelcprice').text(cp); }
       if (a == '2 Af Samme Farve' || a == '4 Af Samme Farve') {
         $('.rsp_select_color').addClass('rsp_color_visible');
       } else {
@@ -184,7 +184,7 @@
       $('.label1').text(option1); $('.label2').text(option2); $('.label4').text(option4);
       var p = $('.rsp_step_detail a.active').data('price');
       var cp = $('.rsp_step_detail a.active').data('cprice');
-      $('.labelprice').text(p); $('.labelcprice').text(cp);
+      $('.labelprice').text(p); if (cp != '') { $('.labelcprice').text(cp); }
       
       console.log(option1+' / '+option2);
     });
