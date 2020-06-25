@@ -1,0 +1,221 @@
+{%- comment -%}Don't edit or remove this - e-marketer @2020{%- endcomment -%}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {%- assign product = all_products[section.settings.product] -%}                                                                                                                   {%- assign product1 = all_products[section.settings.product1] -%}                                                                                                                                                                                                                                                                
+<!-- Sadan Sec2 Start -->
+<div class="rsp_sadan_sec2">
+   <h2 style="font-weight:900; text-align:center; font-size: 2.0rem;">Vælg pakke</h2>
+  <div class="inner">
+    {%- for option in product.options -%}{%- assign option_index = forloop.index0 -%}{%- if option == 'Boks' -%}
+    <div class="rsp_sadan_steps" data-option-index="{{ option_index }}">
+      <ul>{%- assign values = '' -%}{%- for variant in product.variants -%}{% assign value = variant.options[option_index] %}{% unless values contains value %}{% assign values = values | join: ',' %}{% assign values = values | append: ',' | append: value %}{% assign values = values | split: ',' %}
+        <li>
+          <div class="rsp_step_detail">
+            <h3>{% assign newvalue = value | downcase | replace: 't-shirt', '<br>t-shirt' %}{{newvalue}}</h3>
+            <span>Levering: Gratis</span>
+            <span>Pris: {{variant.price | money}} pr. levering</span>
+            <span>Rabat: <strong>
+              {%- if value == '4 ensfarvede T-shirts' -%}30%
+              {%- elsif value == '2 ensfarvede T-shirts' -%}20%
+              {%- elsif value == '1 hvid og 1 sort T-shirt' -%}20%
+              {%- elsif value == '2 hvide og 2 sorte T-shirts' -%}30%{%- else -%}0%{%- endif -%}
+              </strong> pr. levering</span>
+            <a href="javascript:void(0)" data-link="{{ product.id }}-cdsmonth" data-formid="#AddToCartForm-{{product.id}}" data-val="{{value | escape}}" data-price="{{variant.price | money}}" data-cprice=" Fragt Normalpris: {{variant.compare_at_price | money}}">Vælg pakke</a>
+          </div>
+        </li>{% endunless %}{%- endfor -%}
+        
+        {%- for variant1 in product1.variants -%}{% assign value1 = variant1.options[option_index] %}{% unless values1 contains value1 %}{% assign values1 = values1 | join: ',' %}{% assign values1 = values1 | append: ',' | append: value1 %}{% assign values1 = values1 | split: ',' %}
+        <li>
+          <div class="rsp_step_detail">
+            <h3>{% assign newvalue1 = value1 | downcase | replace: 't-shirt', '<br>t-shirt' %}{{newvalue1}}</h3>
+            <span>Levering: Gratis</span>
+            <span>Pris: {{variant1.price | money}} pr. levering</span>
+            <span>Rabat: <strong>
+              {%- if value1 == '4 ensfarvede T-shirts' -%}30%
+              {%- elsif value1 == '2 ensfarvede T-shirts' -%}20%
+              {%- elsif value1 == '1 hvid og 1 sort T-shirt' -%}20%
+              {%- elsif value1 == '2 hvide og 2 sorte T-shirts' -%}30%{%- else -%}0%{%- endif -%}
+              </strong> pr. levering</span>
+            <a href="javascript:void(0)" data-link="{{ product1.id }}-cdsmonth" data-formid="#AddToCartForm-{{product1.id}}" data-val="{{value1 | escape}}" data-price="{{variant1.price | money}}" data-cprice=" Fragt Normalpris: {{variant1.compare_at_price | money}}">Vælg pakke</a>
+          </div>
+        </li>{% endunless %}{%- endfor -%}
+        
+      </ul>
+    </div>{%- endif -%}{%- endfor -%}
+    {%- assign product-id = product.id | prepend: 'AddToCartForm-' -%}
+    {%- form 'product', product, data-productid: product.id, id: product-id, style: 'display:none' -%}{%- if product.available -%}{%- include 'subscription-product' -%}{%- endif -%}
+      <select name="id" data-productid="{{ product.id }}" id="productSelect-{{ product.id }}" class="product-single__variants no-js" autocomplete="off">{% for variant in product.variants %}{% if variant.available %}
+        <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %} data-title="{{ variant.title }}" data-orignalvalue="{{ variant.metafields.subscriptions.discount_variant_id }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>{% else %}
+        <option disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>{% endif %}{% endfor %}
+      </select>
+      <div class="rsp_sadan_form">
+        <div class="rsp_form_toplabel">
+          <label>Afsendelse: Første pakke bliver sendt indenfor 2 hverdage. Herefter ud fra valgte interval.<br><a href="https://bareentshirt.dk/pages/kontakt"> Kontakt os</a>  hvis du vil ændre afsendelsesdag eller adresse</label>
+        </div>
+        <div class="rsp_form_mainbtns" id="{{ product.id }}-cdsmonth">
+          <h2 style="font-weight:900; text-align:center; font-size: 2.0rem;"><label>Hvor ofte</label></h2>
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver Måned" data-val="1" data-link="{{ product.id }}-cdsize">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 2. Måned" data-val="2" data-link="{{ product.id }}-cdsize">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 3. Måned" data-val="3" data-link="{{ product.id }}-cdsize">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 6. Måned" data-val="6" data-link="{{ product.id }}-cdsize">
+        </div>{%- for option in product.options -%}{%- assign option_index = forloop.index0 -%}{%- if option == 'Størrelse' or option == 'Farve' -%}
+        <div class="rsp_select_{%- if option == 'Størrelse' -%}sizes{%- elsif option == 'Farve' -%}color{%- else -%}sizes{%- endif -%}" data-option-index="{{ option_index }}" id="{{ product.id }}-cd{%- if option == 'Størrelse' -%}size{%- elsif option == 'Farve' -%}color{%- else -%}size{%- endif -%}">{%- if option == 'Størrelse' -%}
+          {%- endif -%}
+          <h2 style="font-weight:900; text-align:center; font-size: 2.0rem;"><label class="option-label">Vælg størrelse</label></h2>
+          <ul>{%- assign values = '' -%}{%- for variant in product.variants -%}{% assign value = variant.options[option_index] %}{% unless values contains value %}{% assign values = values | join: ',' %}{% assign values = values | append: ',' | append: value %}{% assign values = values | split: ',' %}
+            <li data-link="{{ product.id }}-cd{%- if option == 'Størrelse' -%}color{%- elsif option == 'Farve' -%}submit{%- else -%}color{%- endif -%}">
+              <input type="radio" id="{{ product.id }}-{{ value | handle }}-option" name="selector-{{option | handle}}" value="{{ value | escape }}">
+              <label for="{{ value | handle }}-option"{%- if option == 'Farve' -%}style="background-color: {%- if value == 'Hvid' -%}#fff{%- elsif value == 'Sort' -%}#000{%- else -%}{{ value | split: ' ' | last | handle }}{%- endif -%};"{%- endif -%}>{{ value | escape }}</label>
+              <div class="check"></div>
+            </li>{% endunless %}{%- endfor -%}
+          </ul>
+        </div>{%- endif -%}{%- endfor -%}
+        <div class="rsp_for_submit" id="{{ product.id }}-cdsubmit"> 
+          <label class="option-label">Bekræftelse</label>
+           <div class="summary">
+            <p>Abonnement valgt: <span class="label1"></span></p>
+            <p>I størrelse <span class="label2"></span></p>
+            <p>Til <span class="labelprice"></span> pr. levering</p>
+            <p>Nye T-shirts sendes <span class="label4"></span></p>
+            <p>HUSK vores abonnement kan afmeldes/ændres til hver en tid.</p>
+            <p>Læs mere om vores øvrige handelsbetingelser <a href="/pages/handelsbetingelser" target="_blank">her</a></p>
+            <input type="submit" name="submit" value="Køb nu">
+          </div>
+        </div>
+      </div>
+    {%- endform -%}
+    
+    {%- assign product1-id = product1.id | prepend: 'AddToCartForm-' -%}
+    {%- form 'product', product1, data-productid: product1.id, id: product1-id, style: 'display:none' -%}{%- if product1.available -%}{% assign product = product1 %}{%- include 'subscription-product' -%}{%- endif -%}
+      <select name="id" data-productid="{{ product1.id }}" id="productSelect-{{ product1.id }}" class="product-single__variants no-js" autocomplete="off">{% for variant1 in product1.variants %}{% if variant1.available %}
+        <option{% if variant1 == product1.selected_or_first_available_variant %} selected="selected"{% endif %} data-title="{{ variant1.title }}" data-orignalvalue="{{ variant1.metafields.subscriptions.discount_variant_id }}" value="{{ variant1.id }}">{{ variant1.title }} - {{ variant1.price | money_with_currency }}</option>{% else %}
+        <option disabled="disabled">{{ variant1.title }} - {{ 'products.product.sold_out' | t }}</option>{% endif %}{% endfor %}
+      </select>
+      <div class="rsp_sadan_form">
+        <div class="rsp_form_toplabel">
+          <label>Afsendelse: Første pakke bliver sendt indenfor 2 hverdage. Herefter ud fra valgte interval.<br><a href="https://bareentshirt.dk/pages/kontakt"> Kontakt os</a>  hvis du vil ændre afsendelsesdag eller adresse</label>
+        </div>
+        <div class="rsp_form_mainbtns" id="{{ product1.id }}-cdsmonth">
+          <h2 style="font-weight:900; text-align:center; font-size: 2.0rem;"><label>Hvor ofte</label></h2>
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver Måned" data-val="1" data-link="{{ product1.id }}-cdsize">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 2. Måned" data-val="2" data-link="{{ product1.id }}-cdsize">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 3. Måned" data-val="3" data-link="{{ product1.id }}-cdsize">
+          <input type="button" name="frequency" class="rsp_select_btn" value="Hver 6. Måned" data-val="6" data-link="{{ product1.id }}-cdsize">
+        </div>{%- for option in product1.options -%}{%- assign option_index = forloop.index0 -%}{%- if option == 'Størrelse' or option == 'Farve' -%}
+        <div class="rsp_select_{%- if option == 'Størrelse' -%}sizes{%- elsif option == 'Farve' -%}color{%- else -%}sizes{%- endif -%}" data-option-index="{{ option_index }}" id="{{ product1.id }}-cd{%- if option == 'Størrelse' -%}size{%- elsif option == 'Farve' -%}color{%- else -%}size{%- endif -%}">{%- if option == 'Størrelse' -%}
+          {%- endif -%}
+          <h2 style="font-weight:900; text-align:center; font-size: 2.0rem;"><label class="option-label">Vælg størrelse</label></h2>
+          <ul>{%- assign values = '' -%}{%- for variant1 in product1.variants -%}{% assign value = variant1.options[option_index] %}{% unless values contains value %}{% assign values = values | join: ',' %}{% assign values = values | append: ',' | append: value %}{% assign values = values | split: ',' %}
+            <li data-link="{{ product1.id }}-cd{%- if option == 'Størrelse' -%}submit{%- elsif option == 'Farve' -%}submit{%- else -%}color{%- endif -%}">
+              <input type="radio" id="{{ product1.id }}-{{ value | handle }}-option" name="selector-{{option | handle}}" value="{{ value | escape }}">
+              <label for="{{ value | handle }}-option"{%- if option == 'Farve' -%}style="background-color: {%- if value == 'Hvid' -%}#fff{%- elsif value == 'Sort' -%}#000{%- else -%}{{ value | split: ' ' | last | handle }}{%- endif -%};"{%- endif -%}>{{ value | escape }}</label>
+              <div class="check"></div>
+            </li>{% endunless %}{%- endfor -%}
+          </ul>
+        </div>{%- endif -%}{%- endfor -%}
+        <div class="rsp_for_submit" id="{{ product1.id }}-cdsubmit">
+          <label class="option-label">Bekræftelse</label>
+           <div class="summary">
+            <p>Abonnement valgt: <span class="label1"></span></p>
+            <p>I størrelse <span class="label2"></span></p>
+            <p>Til <span class="labelprice"></span> pr. levering</p>
+            <p>Nye T-shirts sendes <span class="label4"></span></p>
+            <p>HUSK vores abonnement kan afmeldes/ændres til hver en tid.</p>
+            <p>Læs mere om vores øvrige handelsbetingelser <a href="/pages/handelsbetingelser" target="_blank">her</a></p>
+            <input type="submit" name="submit" value="Køb nu">
+          </div>
+        </div>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Our Subscription Box",
+    "settings": [
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Select Product 1",
+        "info": "Produktet 1 skal have disse muligheder: Boks, Størrelse, Farve"
+      },
+      {
+        "type": "product",
+        "id": "product1",
+        "label": "Select Product 2",
+        "info": "Produktet 2 skal have disse muligheder: Boks, Størrelse, Farve"
+      }
+    ]
+  }
+{% endschema %}
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.rsp_step_detail a').click(function(){
+      $('.rsp_sadan_form').addClass('rsp_visible');
+      $('.rsp_step_detail a').removeClass('active');
+      $(this).addClass('active');
+      $('.shopify-product-form').hide();
+      $($(this).data('formid')).show();
+      var s = $('.rsp_select_sizes ul li.active').length;
+      var a = $('.rsp_step_detail a.active').data('val');
+      var p = $('.rsp_step_detail a.active').data('price');
+      var cp = $('.rsp_step_detail a.active').data('cprice');
+      $('.labelprice').text(p); if (cp != '') { $('.labelcprice').text(cp); }
+      if ((a == '2 ensfarvede T-shirts' || a == '4 ensfarvede T-shirts') && (s > 0)) {
+        $('.rsp_select_color').addClass('rsp_color_visible');
+      } else {
+        $('.rsp_select_color').removeClass('rsp_color_visible');
+        $('.rsp_select_color ul li.active').removeClass('active').find('input[type=radio]').prop('checked', false);
+      }
+      $('html, body').animate({ scrollTop: $('#'+$(this).data('link')).offset().top - 150 }, 1000);
+    });
+
+    $('.rsp_select_btn').click(function(){
+      $('.rsp_select_sizes').addClass('rsp_sizes_visible');
+      $('.rsp_select_btn').removeClass('active');
+      $(this).addClass('active');
+      $('.rc_select__frequency').val($(this).data('val')).trigger('change');
+      $('html, body').animate({ scrollTop: $('#'+$(this).data('link')).offset().top - 150 }, 1000);
+    });
+    $('.rsp_select_sizes ul li').click(function(){
+      $('.rsp_select_sizes ul li').removeClass('active');
+      $(this).addClass('active');
+      var a = $('.rsp_step_detail a.active').data('val');
+      var p = $('.rsp_step_detail a.active').data('price');
+      var cp = $('.rsp_step_detail a.active').data('cprice');
+      $('.labelprice').text(p); if (cp != '') { $('.labelcprice').text(cp); }
+      if (a == '2 ensfarvede T-shirts' || a == '4 ensfarvede T-shirts') {
+        $('.rsp_select_color').addClass('rsp_color_visible');
+      } else {
+        $('.rsp_select_color').removeClass('rsp_color_visible');
+        $('.rsp_for_submit').addClass('rsp_submit_visible');
+      }
+      $('html, body').animate({ scrollTop: $('#'+$(this).data('link')).offset().top - 150 }, 1000);
+    });
+    $('.rsp_select_color ul li').click(function(){
+      $('.rsp_for_submit').addClass('rsp_submit_visible');
+      $('.rsp_select_color ul li').removeClass('active');
+      $(this).addClass('active');
+      $('html, body').animate({ scrollTop: $('#'+$(this).data('link')).offset().top - 150 }, 1000);
+    });
+
+    $(document).on('click','.rsp_step_detail a, .rsp_select_sizes ul li, .rsp_select_color ul li, .rsp_select_btn',function() {
+      var option1 = $('.rsp_step_detail a.active').data('val'); var option2 = $('.rsp_select_sizes ul li.active').find('input[type=radio]').val(); var option3 = $('.rsp_select_color ul li.active').find('input[type=radio]').val(); var option4 = $('.rsp_select_btn.active').val();
+      var optionselectedid = $('#AddToCartForm-{{ product.id }} .product-single__variants option[data-title="'+option1+' / '+option2+' / '+option3+'"]').val();
+      $('#AddToCartForm-{{ product.id }} .product-single__variants').find('option:selected').attr('selected', false);
+      $('#AddToCartForm-{{ product.id }} .product-single__variants').val(optionselectedid).attr('selected', true).trigger('change');
+      
+      var optionselectedid1 = $('#AddToCartForm-{{ product1.id }} .product-single__variants option[data-title="'+option1+' / '+option2+'"]').val();
+      $('#AddToCartForm-{{ product1.id }} .product-single__variants').find('option:selected').attr('selected', false);
+      $('#AddToCartForm-{{ product1.id }} .product-single__variants').val(optionselectedid1).attr('selected', true).trigger('change');
+                               
+      $('.label1').text(option1); $('.label2').text(option2); $('.label4').text(option4);
+      var p = $('.rsp_step_detail a.active').data('price');
+      var cp = $('.rsp_step_detail a.active').data('cprice');
+      $('.labelprice').text(p); if (cp != '') { $('.labelcprice').text(cp); }
+      console.log(option1+' / '+option2);
+      console.log(option1+' / '+option2+' / '+option3);
+    });
+  });
+
+</script>
